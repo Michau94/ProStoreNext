@@ -1,10 +1,9 @@
+import ProductList from "@/components/shared/product/product-list";
 import { Button } from "@/components/ui/button";
+import sampleData from "@/db/sample-data";
 
 export default function HomePage() {
   return (
-    <main>
-      <h1 className="">Welcome to Prostore</h1>
-      <Button className="m-4">Get Started</Button>
-    </main>
+    <ProductList data={sampleData.products} title="Newest Arrivals" limit={4} />
   );
 }
