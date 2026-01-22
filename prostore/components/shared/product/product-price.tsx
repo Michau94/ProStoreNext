@@ -8,7 +8,7 @@ export default function ProductPrice({
   className?: string;
 }) {
   // two decimal places
-  const stringValue = value.toFixed(2);
+  const stringValue = value.toString();
 
   // get the int float
   const [intPart, floatPart] = stringValue.split(".");
