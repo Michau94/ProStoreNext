@@ -11,3 +11,11 @@ export async function getLatestProducts() {
 
   return convertToPlainObject(data);
 }
+
+// get signle product by slug
+
+export async function getProductBySlug(slug: string) {
+  return await prisma.product.findUnique({
+    where: { slug: slug },
+  });
+}
