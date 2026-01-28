@@ -1,3 +1,4 @@
+import CredentialsSignInForm from "@/components/auth/credentials-signin-form";
 import {
   Card,
   CardContent,
@@ -6,16 +7,27 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { APP_NAME } from "@/lib/constants";
-
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Sign In",
 };
 
-export default function SignInPage() {
+export default async function SignInPage(props: {
+  searchParams: Promise<{ callbackUrl?: string }>;
+}) {
+  const { callbackUrl } = await props.searchParams;
+
+  const session = await auth();
+
+  if (session) {
+    redirect(callbackUrl || "/");
+  }
+
   return (
     <div className="w-full max-w-md mx-auto">
       <Card>
@@ -35,7 +47,7 @@ export default function SignInPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Sign in form will be placed here */}
+          <CredentialsSignInForm />
         </CardContent>
       </Card>
     </div>
