@@ -61,8 +61,6 @@ export const config: NextAuthConfig = {
       session.user.role = token.role;
       session.user.name = token.name;
 
-      console.log(token, "TOKEN");
-
       // if update set user name
       if (trigger === "update") {
         session.user.name = token.name;
