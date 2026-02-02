@@ -37,3 +37,14 @@ export function formatError(error: any) {
       : JSON.stringify(error.message);
   }
 }
+
+// round number to 2 decimal places
+export function roundToTwoDecimals(num: number | string): number {
+  if (typeof num === "number") {
+    return Math.round((num + Number.EPSILON) * 100) / 100;
+  } else if (typeof num === "string") {
+    return Math.round((Number(num) + Number.EPSILON) * 100) / 100;
+  } else {
+    throw new Error("Invalid number format");
+  }
+}
