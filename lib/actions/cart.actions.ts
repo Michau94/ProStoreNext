@@ -10,6 +10,8 @@ import {
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
 import { cartItemSchema, insertCartSchema } from "../validators";
+import { revalidatePath } from "next/cache";
+import { Prisma } from "../generated/prisma";
 
 // calculate cart prices
 
@@ -66,12 +68,60 @@ export async function addItemToCart(data: CartItem) {
         sessionCartId: sessionCartId,
         ...calcPrice([item]),
       });
-      console.log(newCart);
+
+      // add to database
+      await prisma.cart.create({
+        data: newCart,
+      });
+
+      revalidatePath(`/product/${product.slug}`);
+      return { success: true, message: `${item.name} added to cart` };
+    } else {
+      // check if item already exists in cart
+      const existItem = (cart.items as CartItem[]).find(
+        (i) => i.productId === item.productId,
+      );
+
+      if (existItem) {
+        // check stock
+
+        if (product.stock < existItem.qty + item.qty) {
+          throw new Error("Insufficient stock available");
+        }
+
+        // udpate quantity
+        (cart.items as CartItem[]).find(
+          (i) => i.productId === item.productId,
+        )!.qty = existItem.qty + 1;
+      } else {
+        // if item does not exist, add new item
+
+        // check stock
+        if (product.stock < 1) {
+          throw new Error("Insufficient stock available");
+        }
+
+        // Add item to stock items
+
+        cart.items.push(item);
+      }
+      // Save to database
+
+      await prisma.cart.update({
+        where: { id: cart.id },
+        data: {
+          items: cart.items as Prisma.CartUpdateitemsInput[],
+          ...calcPrice(cart.items as CartItem[]),
+        },
+      });
+
+      revalidatePath(`/product/${product.slug}`);
+
+      return {
+        success: true,
+        message: `${item.name} ${existItem ? "updated in" : "added to"}  cart`,
+      };
     }
-
-    // testing
-
-    return { success: true, message: "Item added to cart" };
   } catch (err) {
     return { success: false, message: formatError(err) };
   }

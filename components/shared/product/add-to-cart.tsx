@@ -13,7 +13,7 @@ export default function AddToCart({ item }: { item: CartItem }) {
   async function handleAddCart() {
     const res = await addItemToCart(item);
     if (res.success) {
-      toast.success(`${item.name} added to cart`, {
+      toast.success(res.message, {
         action: { label: "View Cart", onClick: () => router.push("/cart") },
       });
     } else {
