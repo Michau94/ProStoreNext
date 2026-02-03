@@ -2,10 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Cart, CartItem } from "@/types";
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { addItemToCart, removeItemFromCart } from "@/lib/actions/cart.actions";
+import { useTransition } from "react";
+import { start } from "repl";
+import { is } from "zod/v4/locales";
 
 export default function AddToCart({
   item,
@@ -15,36 +18,41 @@ export default function AddToCart({
   cart?: Cart;
 }) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   async function handleAddCart() {
-    const res = await addItemToCart(item);
-    if (res.success) {
-      toast.success(res.message, {
-        action: { label: "View Cart", onClick: () => router.push("/cart") },
-      });
-    } else {
-      toast.error("Error", {
-        description: res.message || "Failed to add item to cart",
-      });
-    }
+    startTransition(async () => {
+      const res = await addItemToCart(item);
+      if (res.success) {
+        toast.success(res.message, {
+          action: { label: "View Cart", onClick: () => router.push("/cart") },
+        });
+      } else {
+        toast.error("Error", {
+          description: res.message || "Failed to add item to cart",
+        });
+      }
+    });
   }
 
   // handle remove from cart
 
   const handleRemoveFromCart = async () => {
-    const res = await removeItemFromCart(item.productId);
+    startTransition(async () => {
+      const res = await removeItemFromCart(item.productId);
 
-    if (res.success) {
-      toast.success(res.message, {
-        action: { label: "View Cart", onClick: () => router.push("/cart") },
-      });
-    } else {
-      toast.error("Error", {
-        description: res.message || "Failed to remove item from cart",
-      });
-    }
+      if (res.success) {
+        toast.success(res.message, {
+          action: { label: "View Cart", onClick: () => router.push("/cart") },
+        });
+      } else {
+        toast.error("Error", {
+          description: res.message || "Failed to remove item from cart",
+        });
+      }
 
-    return;
+      return;
+    });
   };
 
   // check if item is already in cart
@@ -54,17 +62,32 @@ export default function AddToCart({
   return existItem ? (
     <div>
       <Button type="button" variant="outline" onClick={handleRemoveFromCart}>
-        <Minus className="h-4 w-4"></Minus>
+        {isPending ? (
+          <Loader className="h-4 w-4 animate-spin" />
+        ) : (
+          <Minus className="h-4 w-4"></Minus>
+        )}
       </Button>
       <span className="px-2">{existItem.qty}</span>
 
       <Button type="button" variant="outline" onClick={handleAddCart}>
-        <Plus className="h-4 w-4"></Plus>
+        {isPending ? (
+          <Loader className="h-4 w-4 animate-spin" />
+        ) : (
+          <Plus className="h-4 w-4"></Plus>
+        )}
       </Button>
     </div>
   ) : (
     <Button className="w-full" type="button" onClick={handleAddCart}>
-      Add to Cart
+      {isPending ? (
+        <Loader className="h-4 w-4 animate-spin" />
+      ) : (
+        <>
+          <Plus className="h-4 w-4"></Plus>
+          Add to Cart
+        </>
+      )}
     </Button>
   );
 }
