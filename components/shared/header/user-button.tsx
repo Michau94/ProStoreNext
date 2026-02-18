@@ -17,7 +17,7 @@ export default async function UserButton() {
   if (!session) {
     return (
       <Button asChild>
-        <Link href="/sign-in">
+        <Link href="/404">
           <UserIcon />
           Sign In
         </Link>
