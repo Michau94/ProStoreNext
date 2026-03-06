@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ProStoreNext
+
+A modern e-commerce frontend built with Next.js.\
+The project demonstrates a scalable frontend architecture for an online
+store with product listing, product pages, and shopping cart
+functionality.
+
+## Overview
+
+ProStoreNext is a modern e-commerce frontend application designed to
+showcase best practices in building scalable web applications using
+Next.js.
+
+The project focuses on clean architecture, component reusability, and
+performance, making it a solid foundation for building production-ready
+e-commerce platforms.
+
+## Tech Stack
+
+-   Next.js
+-   React
+-   TypeScript
+-   Tailwind CSS
+-   REST API integration
+
+## Features
+
+-   Product listing page
+-   Product detail page
+-   Shopping cart functionality
+-   Responsive design
+-   Modern UI components
+-   Modular component structure
+
+## Project Structure
+
+    src/
+    components/      # Reusable UI components
+    pages/           # Application pages
+    styles/          # Global styles
+    utils/           # Helper functions
+    public/          # Static assets
+
+The architecture follows a modular approach to keep components reusable
+and the codebase maintainable.
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the repository
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+``` bash
+git clone https://github.com/Michau94/ProStoreNext.git
+cd ProStoreNext
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+``` bash
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+or
 
-## Learn More
+``` bash
+yarn install
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Run development server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+``` bash
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The application will start on:
 
-## Deploy on Vercel
+    http://localhost:3000
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Build for Production
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+``` bash
+npm run build
+npm run start
+```
+
+## Environment Variables
+
+If the project requires external APIs, create a `.env.local` file in the
+root directory.
+
+Example:
+
+    NEXT_PUBLIC_API_URL=
+
+## Future Improvements
+
+-   Implement checkout flow
+-   Add payment integration
+-   Improve product filtering and search
+-   Add unit and integration tests
+
+## Author
+
+Michau\
+Frontend / Fullstack Developer
+
+GitHub: https://github.com/Michau94
